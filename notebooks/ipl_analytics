@@ -1,0 +1,329 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "4d724a2a-3d0b-4a0c-8fb8-2e61ebc5b617",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "00bef58c-49ed-4bcc-824f-fc3f8cdfd0d3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Matches = pd.read_csv(r\"D:\\ipl_analytics dataset\\matches.csv\")\n",
+    "Matches"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "5d29781c-9c6c-46a6-a635-f398478de8f5",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Deliveries = pd.read_csv(r\"D:\\ipl_analytics dataset\\deliveries.csv\")\n",
+    "Deliveries"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "19e18afd-74a4-4f3f-9c29-0d78f86fca71",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "ms (1095, 20)\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"Matches Shape :\",Matches.shape)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "a43f2ec3-6a09-42b1-bc27-92589d59f440",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Deliveries Shape: (1095, 20)\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"Deliveries Shape:\",Matches.shape)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "id": "33fbfe6c-588b-42f1-b471-96d9517f0400",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Fix date column to proper date time \n",
+    "Matches['date'] = pd.to_datetime(Matches['date'])\n",
+    "Matches['date']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "988b5246-b44e-43cb-80c9-aa585e686735",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "id                    0\n",
+       "season                0\n",
+       "city                 51\n",
+       "date                  0\n",
+       "match_type            0\n",
+       "player_of_match       5\n",
+       "venue                 0\n",
+       "team1                 0\n",
+       "team2                 0\n",
+       "toss_winner           0\n",
+       "toss_decision         0\n",
+       "winner                5\n",
+       "result                0\n",
+       "result_margin        19\n",
+       "target_runs           3\n",
+       "target_overs          3\n",
+       "super_over            0\n",
+       "method             1074\n",
+       "umpire1               0\n",
+       "umpire2               0\n",
+       "dtype: int64"
+      ]
+     },
+     "execution_count": 23,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#Checking Nulls in Matches\n",
+    "Matches.isnull().sum()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "id": "121750cc-403f-4ed3-916d-583542865f03",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Fix Nulls in Matches\n",
+    "Matches['city'] = Matches['city'].fillna('Unknown')\n",
+    "Matches['player_of_match'] = Matches['player_of_match'].fillna('Unknown')\n",
+    "Matches['winner'] = Matches['winner'].fillna('No Result')\n",
+    "Matches['result_margin'] = Matches['result_margin'].fillna('0')\n",
+    "Matches['target_runs'] = Matches['target_runs'].fillna('0')\n",
+    "Matches['target_overs'] = Matches['target_overs'].fillna('0')\n",
+    "Matches['method'] = Matches['method'].fillna('0')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "id": "530d76cf-4548-4909-a1d3-69d11e5acf1b",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Matches nulls after cleaning:\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "id                 0\n",
+       "season             0\n",
+       "city               0\n",
+       "date               0\n",
+       "match_type         0\n",
+       "player_of_match    0\n",
+       "venue              0\n",
+       "team1              0\n",
+       "team2              0\n",
+       "toss_winner        0\n",
+       "toss_decision      0\n",
+       "winner             0\n",
+       "result             0\n",
+       "result_margin      0\n",
+       "target_runs        0\n",
+       "target_overs       0\n",
+       "super_over         0\n",
+       "method             0\n",
+       "umpire1            0\n",
+       "umpire2            0\n",
+       "dtype: int64"
+      ]
+     },
+     "execution_count": 36,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#Matches after cleaning nulls\n",
+    "print('Matches nulls after cleaning:')\n",
+    "Matches.isnull().sum()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "id": "f94f0975-96fc-44a2-9f67-adb376ebb1d7",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "match_id                 0\n",
+       "inning                   0\n",
+       "batting_team             0\n",
+       "bowling_team             0\n",
+       "over                     0\n",
+       "ball                     0\n",
+       "batter                   0\n",
+       "bowler                   0\n",
+       "non_striker              0\n",
+       "batsman_runs             0\n",
+       "extra_runs               0\n",
+       "total_runs               0\n",
+       "extras_type         246795\n",
+       "is_wicket                0\n",
+       "player_dismissed    247970\n",
+       "dismissal_kind      247970\n",
+       "fielder             251566\n",
+       "dtype: int64"
+      ]
+     },
+     "execution_count": 37,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#Checking null in deliveries\n",
+    "Deliveries.isnull().sum()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "id": "a027fe8a-dcde-469c-9026-9e120c3b10c3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Fixing nulls in Dieliveries\n",
+    "Deliveries['extras_type'] = Deliveries['extras_type'].fillna('None')\n",
+    "Deliveries['player_dismissed'] = Deliveries['player_dismissed'].fillna('None')\n",
+    "Deliveries['dismissal_kind'] = Deliveries ['dismissal_kind'].fillna('None')\n",
+    "Deliveries['fielder'] = Deliveries ['fielder'].fillna('None')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "id": "a01b6b4c-5a19-441a-952c-2a532a21b13e",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "match_id            0\n",
+       "inning              0\n",
+       "batting_team        0\n",
+       "bowling_team        0\n",
+       "over                0\n",
+       "ball                0\n",
+       "batter              0\n",
+       "bowler              0\n",
+       "non_striker         0\n",
+       "batsman_runs        0\n",
+       "extra_runs          0\n",
+       "total_runs          0\n",
+       "extras_type         0\n",
+       "is_wicket           0\n",
+       "player_dismissed    0\n",
+       "dismissal_kind      0\n",
+       "fielder             0\n",
+       "dtype: int64"
+      ]
+     },
+     "execution_count": 41,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#Deliveries after cleaning nulls\n",
+    "print(\"\\n Deliveries after cleaning null values\")\n",
+    "Deliveries.isnull().sum()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "id": "5e790712-d38f-469d-af56-062f2fee58b9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Saving the clean data\n",
+    "Matches.to_csv(r\"D:\\ipl_analytics dataset\\matches.csv\",index = False)\n",
+    "Deliveries.to_csv(r\"D:\\ipl_analytics dataset\\deliveries.csv\",index = False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9c8a3ce6-1ea0-40d8-81ff-a16880a216ba",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print ('\\n clean files saved successfully')"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python [conda env:base] *",
+   "language": "python",
+   "name": "conda-base-py"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.9"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
